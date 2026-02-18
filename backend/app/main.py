@@ -6,7 +6,7 @@ from . import models
 from .routers import employees, attendance
 import os
 
-port = int(os.environ.get("PORT", 8001))
+port = int(os.environ.get("PORT", 8000))
 
 models.Base.metadata.create_all(bind=engine)
 
