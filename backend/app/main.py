@@ -4,6 +4,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from .database import engine
 from . import models
 from .routers import employees, attendance
+import os
+
+port = int(os.environ.get("PORT", 8001))
 
 models.Base.metadata.create_all(bind=engine)
 
