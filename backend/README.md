@@ -1,7 +1,3 @@
-# hrms-lite
-
-
-
 # HRMS Lite – Backend API
 
 A lightweight Human Resource Management System (HRMS Lite) backend built using **FastAPI** and **PostgreSQL**.
