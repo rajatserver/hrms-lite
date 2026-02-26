@@ -1,13 +1,14 @@
-
 import { useState, useEffect } from "react";
 import API from "../api/client";
 
 export default function AttendanceForm({ refresh, selectedEmployee, onClose }) {
+  const today = new Date().toISOString().split('T')[0];
   const [form, setForm] = useState({
     employee_id: selectedEmployee?.employee_id || "",
-    date: "",
+    date: today,
     status: "Present",
   });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setForm((prev) => ({
@@ -18,55 +19,84 @@ export default function AttendanceForm({ refresh, selectedEmployee, onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      await API.post("/attendance", form);
+      await API.post("/attendance/", form);
       refresh(form.employee_id);
+      onClose();
     } catch (err) {
       alert(err.response?.data?.detail || "Error marking attendance");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl shadow-lg mb-8 border border-gray-100 max-w-2xl mx-auto relative">
-      <h2 className="text-xl font-bold mb-6 text-gray-800">Mark Attendance</h2>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <input
-          placeholder="Employee ID"
-          required
-          value={form.employee_id}
-          readOnly
-          className="border border-gray-300 rounded-lg px-4 py-2 bg-gray-100 text-gray-700 shadow-sm w-full focus:outline-none cursor-not-allowed"
-        />
-
-        <input
-          type="date"
-          required
-          value={form.date}
-          onChange={(e) => setForm({ ...form, date: e.target.value })}
-          className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 transition w-full text-gray-700 bg-gray-50 shadow-sm"
-        />
-
-        <select
-          value={form.status}
-          onChange={(e) => setForm({ ...form, status: e.target.value })}
-          className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 transition w-full text-gray-700 bg-gray-50 shadow-sm"
-        >
-          <option>Present</option>
-          <option>Absent</option>
-        </select>
-      </div>
-
-      <div className="flex justify-between items-center mt-8">
-        <button type="submit" className="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-2 rounded-lg shadow transition w-full md:w-auto">
-          Submit
+    <div className="relative">
+      <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+        <h2 className="text-lg font-bold text-slate-900">Mark Attendance</h2>
+        <button onClick={onClose} className="p-2 text-slate-400 hover:text-slate-600 transition-colors">
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </button>
-        {onClose && (
-          <button type="button" onClick={onClose} className="ml-4 text-gray-500 hover:text-gray-700 px-4 py-2 rounded transition">
-            Close
-          </button>
-        )}
       </div>
-    </form>
+
+      <form onSubmit={handleSubmit} className="p-8 space-y-6">
+        <div className="flex items-center gap-4 bg-indigo-50 p-4 rounded-xl border border-indigo-100">
+          <div className="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold">
+            {selectedEmployee?.full_name?.charAt(0).toUpperCase()}
+          </div>
+          <div>
+            <div className="font-bold text-indigo-900">{selectedEmployee?.full_name}</div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Selection Date</label>
+            <input
+              type="date"
+              required
+              value={form.date}
+              max={today}
+              onChange={(e) => setForm({ ...form, date: e.target.value })}
+              className="input-primary"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Attendance Status</label>
+            <div className="flex p-1 bg-slate-100 rounded-xl border border-slate-200">
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, status: "Present" })}
+                className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${form.status === 'Present' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+              >
+                Present
+              </button>
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, status: "Absent" })}
+                className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${form.status === 'Absent' ? 'bg-white text-red-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+              >
+                Absent
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex gap-3 pt-2">
+          <button type="button" onClick={onClose} className="btn-secondary flex-1">
+            Cancel
+          </button>
+          <button type="submit" disabled={loading} className="btn-primary flex-1">
+            {loading ? (
+              <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+            ) : "Confirm Selection"}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }
