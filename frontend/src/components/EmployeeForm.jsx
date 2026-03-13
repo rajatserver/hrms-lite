@@ -45,7 +45,7 @@ export default function EmployeeForm({ refresh }) {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-4">
           <div>
-            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5 block">Identity</label>
+            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5 block">EMPLOYEE ID</label>
             <input
               placeholder="Employee ID (e.g. EMP001)"
               required
