@@ -67,7 +67,7 @@ export default function App() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 005.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
             </div>
-            <h1 className="text-xl font-bold text-slate-900 tracking-tight">HRMS <span className="text-indigo-600">Pro</span></h1>
+            <h1 className="text-xl font-bold text-slate-900 tracking-tight">HRMS <span className="text-indigo-600">Lite</span></h1>
           </div>
           <div className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-500">
           </div>
@@ -85,7 +85,7 @@ export default function App() {
               <p className="text-indigo-100 text-sm mb-4">
                 {apiHealth === false
                   ? "The API is currently starting up due to the free hosting tier. Please allow up to one minute for the container to become operational on Vercel. Thank you for your patience."
-                  : "The HRMS Pro instance is healthy and connected to the production database."}
+                  : "The HRMS lite instance is healthy and connected to the production database."}
               </p>
               <div className="flex items-center gap-2 text-xs font-mono bg-indigo-700/50 p-2 rounded-lg">
                 <span className={`w-2 h-2 rounded-full ${apiHealth === null ? 'bg-yellow-400 animate-pulse' : apiHealth ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`}></span>
