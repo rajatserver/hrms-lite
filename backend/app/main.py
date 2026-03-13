@@ -29,3 +29,9 @@ app.include_router(attendance.router)
 @app.get("/health")
 def health_check():
     return {"status": "HRMS Lite API running"}
+
+
+
+@app.get("/")
+def health_check():
+    return {"status": "HRMS Lite API running"}
