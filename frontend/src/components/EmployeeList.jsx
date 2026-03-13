@@ -62,10 +62,11 @@ export default function EmployeeList({ employees, refresh, onSelectEmployee, sel
                 <td className="py-4 px-6">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm">
-                      {emp.full_name.charAt(0).toUpperCase()}
+                      {emp.full_name ? emp.full_name.split(' ').map(w => w.charAt(0).toUpperCase()).join('') : ''}
                     </div>
                     <div>
-                      <div className="font-semibold text-slate-900 leading-tight">{emp.full_name}</div>
+                      <div className="font-semibold text-slate-900 leading-tight">{emp.full_name ? emp.full_name.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ') : ''}</div>
+                      <div className="text-xs text-slate-500 mt-1">Employee ID: {emp.employee_id}</div>
                     </div>
                   </div>
                 </td>
